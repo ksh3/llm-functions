@@ -1,0 +1,27 @@
+{"code":"f25ff586","kind":"function","line_no":3,"name":"get_ipinfo","path":"agents/demo/tools.py","range_end":3,"range_start":3,"scope":"symbol_only","text":"def get_ipinfo():"}
+{"code":"8de2f487","kind":"function","line_no":13,"name":"main","path":"scripts/build-declarations.py","range_end":13,"range_start":13,"scope":"symbol_only","text":"def main(is_tool=True):"}
+{"code":"120cc3cb","kind":"function","line_no":40,"name":"extract_functions","path":"scripts/build-declarations.py","range_end":40,"range_start":40,"scope":"symbol_only","text":"def extract_functions(contents: str, is_tool: bool):"}
+{"code":"6a5a7c3d","kind":"function","line_no":61,"name":"get_arg_type","path":"scripts/build-declarations.py","range_end":61,"range_start":61,"scope":"symbol_only","text":"def get_arg_type(annotation) -> str:"}
+{"code":"bd48b7fd","kind":"function","line_no":81,"name":"parse_docstring","path":"scripts/build-declarations.py","range_end":81,"range_start":81,"scope":"symbol_only","text":"def parse_docstring(docstring: str):"}
+{"code":"12a7ee32","kind":"function","line_no":105,"name":"parse_param","path":"scripts/build-declarations.py","range_end":105,"range_start":105,"scope":"symbol_only","text":"def parse_param(raw_param: str):"}
+{"code":"d8cf6c2f","kind":"function","line_no":129,"name":"build_declaration","path":"scripts/build-declarations.py","range_end":129,"range_start":129,"scope":"symbol_only","text":"def build_declaration("}
+{"code":"7b69320b","kind":"function","line_no":165,"name":"build_property","path":"scripts/build-declarations.py","range_end":165,"range_start":165,"scope":"symbol_only","text":"def build_property(type_: str, description: str):"}
+{"code":"c6c8c9fa","kind":"function","line_no":12,"name":"main","path":"scripts/run-agent.py","range_end":12,"range_start":12,"scope":"symbol_only","text":"def main():"}
+{"code":"512c682a","kind":"function","line_no":23,"name":"parse_raw_data","path":"scripts/run-agent.py","range_end":23,"range_start":23,"scope":"symbol_only","text":"def parse_raw_data(data):"}
+{"code":"d399ccd8","kind":"function","line_no":33,"name":"parse_argv","path":"scripts/run-agent.py","range_end":33,"range_start":33,"scope":"symbol_only","text":"def parse_argv(this_file_name):"}
+{"code":"4bc05380","kind":"function","line_no":61,"name":"setup_env","path":"scripts/run-agent.py","range_end":61,"range_start":61,"scope":"symbol_only","text":"def setup_env(root_dir, agent_name, agent_func):"}
+{"code":"639def4f","kind":"function","line_no":70,"name":"load_env","path":"scripts/run-agent.py","range_end":70,"range_start":70,"scope":"symbol_only","text":"def load_env(file_path):"}
+{"code":"ae1040f5","kind":"function","line_no":96,"name":"run","path":"scripts/run-agent.py","range_end":96,"range_start":96,"scope":"symbol_only","text":"def run(agent_name, agent_path, agent_func, agent_data):"}
+{"code":"6a9427e9","kind":"function","line_no":111,"name":"return_to_llm","path":"scripts/run-agent.py","range_end":111,"range_start":111,"scope":"symbol_only","text":"def return_to_llm(value):"}
+{"code":"8321840b","kind":"function","line_no":129,"name":"dump_result","path":"scripts/run-agent.py","range_end":129,"range_start":129,"scope":"symbol_only","text":"def dump_result(name):"}
+{"code":"f1f8b294","kind":"function","line_no":12,"name":"main","path":"scripts/run-tool.py","range_end":12,"range_start":12,"scope":"symbol_only","text":"def main():"}
+{"code":"bf3d7426","kind":"function","line_no":23,"name":"parse_raw_data","path":"scripts/run-tool.py","range_end":23,"range_start":23,"scope":"symbol_only","text":"def parse_raw_data(data):"}
+{"code":"0e27c39b","kind":"function","line_no":33,"name":"parse_argv","path":"scripts/run-tool.py","range_end":33,"range_start":33,"scope":"symbol_only","text":"def parse_argv(this_file_name):"}
+{"code":"0ae773bd","kind":"function","line_no":58,"name":"setup_env","path":"scripts/run-tool.py","range_end":58,"range_start":58,"scope":"symbol_only","text":"def setup_env(root_dir, tool_name):"}
+{"code":"d1210bcf","kind":"function","line_no":65,"name":"load_env","path":"scripts/run-tool.py","range_end":65,"range_start":65,"scope":"symbol_only","text":"def load_env(file_path):"}
+{"code":"184eaea8","kind":"function","line_no":91,"name":"run","path":"scripts/run-tool.py","range_end":91,"range_start":91,"scope":"symbol_only","text":"def run(tool_name, tool_path, tool_func, tool_data):"}
+{"code":"c072eea6","kind":"function","line_no":106,"name":"return_to_llm","path":"scripts/run-tool.py","range_end":106,"range_start":106,"scope":"symbol_only","text":"def return_to_llm(value):"}
+{"code":"019577de","kind":"function","line_no":124,"name":"dump_result","path":"scripts/run-tool.py","range_end":124,"range_start":124,"scope":"symbol_only","text":"def dump_result(name):"}
+{"code":"03bcc6ce","kind":"function","line_no":4,"name":"run","path":"tools/demo_py.py","range_end":4,"range_start":4,"scope":"symbol_only","text":"def run("}
+{"code":"9d98c144","kind":"function","line_no":6,"name":"run","path":"tools/execute_py_code.py","range_end":6,"range_start":6,"scope":"symbol_only","text":"def run(code: str):"}
+{"code":"4da3f88c","kind":"function","line_no":21,"name":"exec_with_return","path":"tools/execute_py_code.py","range_end":21,"range_start":21,"scope":"symbol_only","text":"def exec_with_return(code: str, globals: dict, locals: dict):"}

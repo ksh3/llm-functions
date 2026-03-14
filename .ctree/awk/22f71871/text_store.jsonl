@@ -1,0 +1,1 @@
+{"hash":"02c54d66","source":"symbol","kind":"function","name":"inspectHunks","path":"utils/patch.awk","scope":"symbol_only","line_no":98,"text":"function inspectHunks() {"}

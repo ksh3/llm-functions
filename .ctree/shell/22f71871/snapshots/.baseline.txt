@@ -1,0 +1,17 @@
+# compact ctx (code-tree)
+- generated_at: 2026-03-14T13:57:37.211818Z
+- repo_root: /Users/ksh3/Development/llm-functions
+- syntax: shell
+- include: **/*.{sh,bash,zsh}
+- exclude: **/.git/**,**/testdata/**,**/tmp/**,**/vendor/**
+- strong: (none)
+- weak: (none)
+- ctx estm: 1 K
+- template: plain
+
+## Strong scope summary
+(no strong matches)
+
+## Weak scope summary
+(no weak matches)
+

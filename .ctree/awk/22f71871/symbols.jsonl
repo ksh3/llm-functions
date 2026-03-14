@@ -1,0 +1,1 @@
+{"code":"02c54d66","kind":"function","line_no":98,"name":"inspectHunks","path":"utils/patch.awk","range_end":98,"range_start":98,"scope":"symbol_only","text":"function inspectHunks() {"}

@@ -1,7 +1,5 @@
 /tmp
-/tools.txt
 /agents.txt
-functions.json
 /bin
 /cache
 /agents/_*
@@ -15,4 +13,4 @@ node_modules
 /package.json
 package-lock.json
 *.lock
-/mcp.json
+.ctree

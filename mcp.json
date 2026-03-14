@@ -1,0 +1,36 @@
+{
+    "mcpServers": {
+        "pathfinder": {
+            "command": "pathfinder",
+            "args": ["--mcp", "--root", "."],
+            "env": {
+                "PF_MCP_INFERENCE": "code"
+            },
+            "prefix": true
+        },
+        "ctree": {
+            "command": "ctree",
+            "args": ["--mcp", "--root", "."],
+            "prefix": true
+        },
+        "serena": {
+            "command": "uvx",
+            "args": [
+                "--from",
+                "git+https://github.com/oraios/serena",
+                "serena",
+                "start-mcp-server",
+                "--context",
+                "claude-code",
+                "--project-from-cwd"
+            ],
+            "prefix": true
+        },
+        "filesystem": {
+            "command": "npx",
+            "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
+            "env": {},
+            "prefix": true
+        }
+    }
+}

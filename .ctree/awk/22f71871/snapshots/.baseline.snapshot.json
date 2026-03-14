@@ -1,0 +1,1 @@
+{"schema_version":3,"rev":"baseline","lang":"awk","generated_at":"2026-03-14T13:57:37.720121Z","symbols":[{"path":"utils/patch.awk","code":"02c54d66","kind":"function","name":"inspectHunks"}],"depends":[]}

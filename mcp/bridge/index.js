@@ -9,6 +9,7 @@ import express from "express";
 const app = express();
 const PORT = process.env.MCP_BRIDGE_PORT || 8808;
 
+const MCP_ROOT = process.env.LLM_MCP_ROOT || process.cwd();
 let [rootDir] = process.argv.slice(2);
 
 if (!rootDir) {
@@ -32,6 +33,7 @@ async function startMcpServer(id, serverConfig) {
   const { prefix = true, ...rest } = serverConfig;
   const transport = new StdioClientTransport({
     ...rest,
+    cwd: MCP_ROOT,
   });
   const client = new Client(
     { name: id, version: "1.0.0" },
@@ -86,14 +88,12 @@ async function startMcpServer(id, serverConfig) {
 }
 
 async function runBridge() {
-  let hasError = false;
   let runningMcpServers = await Promise.all(
     Object.entries(mcpServers).map(
       async ([name, serverConfig]) => {
         try {
           return await startMcpServer(name, serverConfig)
         } catch (err) {
-          hasError = true;
           console.error(`Failed to start ${name} server; ${err.message}`)
         }
       }
@@ -101,10 +101,6 @@ async function runBridge() {
   );
   runningMcpServers = runningMcpServers.filter(s => !!s);
   const stopMcpServers = () => Promise.all(runningMcpServers.map(s => s[Symbol.asyncDispose]()));
-  if (hasError) {
-    await stopMcpServers();
-    return;
-  }
 
   const definitions = runningMcpServers.flatMap(s => s.tools.map(t => t.spec));
   const runTool = async (name, args) => {

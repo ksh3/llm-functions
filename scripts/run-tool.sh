@@ -10,7 +10,7 @@ main() {
     parse_argv "$@"
     setup_env
     tool_path="$root_dir/tools/$tool_name.sh"
-    run 
+    run
 }
 
 parse_argv() {
@@ -24,13 +24,16 @@ parse_argv() {
     if [[ "$tool_name" == *.sh ]]; then
         tool_name="${tool_name:0:$((${#tool_name}-3))}"
     fi
-    if [[ -z "$tool_data" ]] || [[ -z "$tool_name" ]]; then
+    if [[ -z "$tool_name" ]]; then
         die "usage: ./run-tool.sh <tool-name> <tool-data>"
+    fi
+    if [[ -z "$tool_data" ]]; then
+        tool_data='{}'
     fi
 }
 
 setup_env() {
-    load_env "$root_dir/.env" 
+    load_env "$root_dir/.env"
     export LLM_ROOT_DIR="$root_dir"
     export LLM_TOOL_NAME="$tool_name"
     export LLM_TOOL_CACHE_DIR="$LLM_ROOT_DIR/cache/$tool_name"
@@ -54,24 +57,20 @@ load_env() {
 }
 
 run() {
-    if [[ -z "$tool_data" ]]; then
-        die "error: no JSON data"
-    fi
-
     if [[ "$OS" == "Windows_NT" ]]; then
         set -o igncr
         tool_path="$(cygpath -w "$tool_path")"
         tool_data="$(echo "$tool_data" | sed 's/\\/\\\\/g')"
     fi
 
-    jq_script="$(cat <<-'EOF'
+    jq_script="$(cat <<-'JQEOF'
 def escape_shell_word:
   tostring
   | gsub("'"; "'\"'\"'")
   | gsub("\n"; "'$'\\n''")
   | "'\(.)'";
 def to_args:
-    to_entries | .[] | 
+    to_entries | .[] |
     (.key | split("_") | join("-")) as $key |
     if .value | type == "array" then
         .value | .[] | "--\($key) \(. | escape_shell_word)"
@@ -81,7 +80,7 @@ def to_args:
         "--\($key) \(.value | escape_shell_word)"
     end;
 [ to_args ] | join(" ")
-EOF
+JQEOF
 )"
     args="$(echo "$tool_data" | jq -r "$jq_script" 2>/dev/null)" || {
         die "error: invalid JSON data"
@@ -99,15 +98,15 @@ EOF
 }
 
 dump_result() {
-    if [[ "$LLM_OUTPUT" == "/dev/stdout" ]] || [[ -z "$LLM_DUMP_RESULTS" ]] ||  [[ ! -t 1 ]]; then
-        return;
+    if [[ "$LLM_OUTPUT" == "/dev/stdout" ]] || [[ -z "$LLM_DUMP_RESULTS" ]] || [[ ! -t 1 ]]; then
+        return
     fi
     if grep -q -w -E "$LLM_DUMP_RESULTS" <<<"$1"; then
-        cat <<EOF
+        cat <<EOF2
 $(echo -e "\e[2m")----------------------
 $(cat "$LLM_OUTPUT")
 ----------------------$(echo -e "\e[0m")
-EOF
+EOF2
     fi
 }
 

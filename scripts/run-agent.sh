@@ -10,7 +10,7 @@ main() {
     parse_argv "$@"
     setup_env
     tools_path="$root_dir/agents/$agent_name/tools.sh"
-    run 
+    run
 }
 
 parse_argv() {
@@ -26,13 +26,16 @@ parse_argv() {
     if [[ "$agent_name" == *.sh ]]; then
         agent_name="${agent_name:0:$((${#agent_name}-3))}"
     fi
-    if [[ -z "$agent_data" ]] || [[ -z "$agent_func" ]] || [[ -z "$agent_name" ]]; then
+    if [[ -z "$agent_name" ]] || [[ -z "$agent_func" ]]; then
         die "usage: ./run-agent.sh <agent-name> <agent-func> <agent-data>"
+    fi
+    if [[ -z "$agent_data" ]]; then
+        agent_data='{}'
     fi
 }
 
 setup_env() {
-    load_env "$root_dir/.env" 
+    load_env "$root_dir/.env"
     export LLM_ROOT_DIR="$root_dir"
     export LLM_AGENT_NAME="$agent_name"
     export LLM_AGENT_FUNC="$agent_func"
@@ -58,24 +61,20 @@ load_env() {
 }
 
 run() {
-    if [[ -z "$agent_data" ]]; then
-        die "error: no JSON data"
-    fi
-
     if [[ "$OS" == "Windows_NT" ]]; then
         set -o igncr
         tools_path="$(cygpath -w "$tools_path")"
-        tool_data="$(echo "$tool_data" | sed 's/\\/\\\\/g')"
+        agent_data="$(echo "$agent_data" | sed 's/\\/\\\\/g')"
     fi
 
-    jq_script="$(cat <<-'EOF'
+    jq_script="$(cat <<-'JQEOF'
 def escape_shell_word:
   tostring
   | gsub("'"; "'\"'\"'")
   | gsub("\n"; "'$'\\n''")
   | "'\(.)'";
 def to_args:
-    to_entries | .[] | 
+    to_entries | .[] |
     (.key | split("_") | join("-")) as $key |
     if .value | type == "array" then
         .value | .[] | "--\($key) \(. | escape_shell_word)"
@@ -85,7 +84,7 @@ def to_args:
         "--\($key) \(.value | escape_shell_word)"
     end;
 [ to_args ] | join(" ")
-EOF
+JQEOF
 )"
     args="$(echo "$agent_data" | jq -r "$jq_script" 2>/dev/null)" || {
         die "error: invalid JSON data"
@@ -104,15 +103,15 @@ EOF
 }
 
 dump_result() {
-    if [[ "$LLM_OUTPUT" == "/dev/stdout" ]] || [[ -z "$LLM_DUMP_RESULTS" ]] ||  [[ ! -t 1 ]]; then
-        return;
+    if [[ "$LLM_OUTPUT" == "/dev/stdout" ]] || [[ -z "$LLM_DUMP_RESULTS" ]] || [[ ! -t 1 ]]; then
+        return
     fi
     if grep -q -w -E "$LLM_DUMP_RESULTS" <<<"$1"; then
-        cat <<EOF
+        cat <<EOF2
 $(echo -e "\e[2m")----------------------
 $(cat "$LLM_OUTPUT")
 ----------------------$(echo -e "\e[0m")
-EOF
+EOF2
     fi
 }
 
@@ -122,4 +121,3 @@ die() {
 }
 
 main "$@"
-

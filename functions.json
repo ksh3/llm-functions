@@ -1,6 +1,6 @@
 [
   {
-    "name": "jq",
+    "name": "fn_jq",
     "description": "Run jq for JSON filtering and transformation.\nTypical usage hints: extract fields (`.foo`), iterate arrays (`.items[]`), filter (`select(...)`), build new JSON (`{k: .v}`).\nProvide all jq CLI arguments via --args, including filter and optional file paths.",
     "parameters": {
       "type": "object",
@@ -20,7 +20,7 @@
     }
   },
   {
-    "name": "awk",
+    "name": "fn_awk",
     "description": "Run awk for pattern matching and column-based text processing.\nTypical usage hints: field extraction (`{print $1}`), filtering (`$3 > 10`), delimiter control (`-F ','`).\nProvide all awk CLI arguments via --args.",
     "parameters": {
       "type": "object",
@@ -40,7 +40,7 @@
     }
   },
   {
-    "name": "sed",
+    "name": "fn_sed",
     "description": "Run sed for stream editing.\nTypical usage hints: substitute (`s/old/new/g`), print ranges (`-n '10,20p'`), in-place edits (`-i`) when needed.\nProvide all sed CLI arguments via --args.",
     "parameters": {
       "type": "object",
@@ -60,7 +60,7 @@
     }
   },
   {
-    "name": "head",
+    "name": "fn_head",
     "description": "Run head for quick preview of the beginning of files or streams.\nTypical usage hints: first N lines (`-n 50`), first bytes (`-c 200`).\nProvide all head CLI arguments via --args.",
     "parameters": {
       "type": "object",
@@ -80,7 +80,7 @@
     }
   },
   {
-    "name": "tokei",
+    "name": "fn_tokei",
     "description": "Run tokei for code statistics (lines, blanks, comments, language breakdown).\nTypical usage hints: target project paths, use `--sort` or `--output json` for structured output.\nProvide all tokei CLI arguments via --args.",
     "parameters": {
       "type": "object",
@@ -100,7 +100,7 @@
     }
   },
   {
-    "name": "dust",
+    "name": "fn_dust",
     "description": "Run dust for disk-usage visualization.\nTypical usage hints: inspect directory sizes, limit depth (`-d`), reverse sort (`-r`).\nProvide all dust CLI arguments via --args.",
     "parameters": {
       "type": "object",
@@ -120,7 +120,7 @@
     }
   },
   {
-    "name": "w3m",
+    "name": "fn_w3m",
     "description": "Run w3m in dump mode (`--dump`) for text extraction from web pages or HTML.\nThis wrapper always enforces `w3m --dump` and appends your --args.\nTypical usage hints: pass URL directly, tune width with `-cols`, provide HTML via --stdin plus `-T text/html`.",
     "parameters": {
       "type": "object",
@@ -140,7 +140,7 @@
     }
   },
   {
-    "name": "cat",
+    "name": "fn_cat",
     "description": "Run cat for file concatenation and raw text output.\nTypical usage hints: read files in order, include line numbers (`-n`) when needed.\nProvide all cat CLI arguments via --args.",
     "parameters": {
       "type": "object",
@@ -160,7 +160,7 @@
     }
   },
   {
-    "name": "rg",
+    "name": "fn_rg",
     "description": "Run ripgrep (`rg`) for fast text search.\nTypical usage hints: basic search (`pattern path`), file filtering (`-g`), line numbers (`-n`), context (`-C`).\nProvide all rg CLI arguments via --args.",
     "parameters": {
       "type": "object",
@@ -180,7 +180,7 @@
     }
   },
   {
-    "name": "fd",
+    "name": "fn_fd",
     "description": "Run fd for fast file discovery by pattern.\nTypical usage hints: search by name (`pattern path`), type filtering (`-t f`/`-t d`), extension (`-e`).\nProvide all fd CLI arguments via --args.",
     "parameters": {
       "type": "object",
@@ -200,7 +200,7 @@
     }
   },
   {
-    "name": "ps_aux",
+    "name": "fn_ps_aux",
     "description": "Show process list using `ps aux`.\nUseful for checking high CPU or memory usage, process owners, and command lines.",
     "parameters": {
       "type": "object",
@@ -218,7 +218,7 @@
     }
   },
   {
-    "name": "lsof_listen",
+    "name": "fn_lsof_listen",
     "description": "Show listening TCP sockets for a specific port using `lsof -nP -iTCP:<PORT> -sTCP:LISTEN`.\nUse this to identify which process owns a port.",
     "parameters": {
       "type": "object",
@@ -234,7 +234,7 @@
     }
   },
   {
-    "name": "pwd",
+    "name": "fn_pwd",
     "description": "Show current working directory using `pwd`.\nPass extra pwd options via --args when needed.",
     "parameters": {
       "type": "object",
@@ -248,7 +248,7 @@
     }
   },
   {
-    "name": "mkdir",
+    "name": "fn_mkdir",
     "description": "Create directories using `mkdir -p`.\nThis wrapper always includes `-p` so existing directories do not fail.",
     "parameters": {
       "type": "object",
@@ -264,7 +264,7 @@
     }
   },
   {
-    "name": "tail",
+    "name": "fn_tail",
     "description": "Run tail for viewing end of files or streams.\nTypical usage hints: last N lines (`-n 100`), follow mode (`-f`).\nProvide all tail CLI arguments via --args.",
     "parameters": {
       "type": "object",
@@ -284,7 +284,7 @@
     }
   },
   {
-    "name": "wc",
+    "name": "fn_wc",
     "description": "Run wc for counting lines, words, and bytes.\nTypical usage hints: line count (`-l`), word count (`-w`), byte count (`-c`).\nProvide all wc CLI arguments via --args.",
     "parameters": {
       "type": "object",
@@ -304,7 +304,7 @@
     }
   },
   {
-    "name": "sort_uniq",
+    "name": "fn_sort_uniq",
     "description": "Aggregate values with `sort | uniq`.\nTypical usage hints: count duplicates (`uniq -c`), ignore case (`sort -f`, `uniq -i`).",
     "parameters": {
       "type": "object",
@@ -326,7 +326,7 @@
     }
   },
   {
-    "name": "xargs",
+    "name": "fn_xargs",
     "description": "Run xargs for pipeline argument expansion.\nTypical usage hints: build command calls from stdin, use `-I {}` for placeholders, use `-0` with null-delimited input.\nProvide all xargs CLI arguments via --args.",
     "parameters": {
       "type": "object",
@@ -346,7 +346,7 @@
     }
   },
   {
-    "name": "curl",
+    "name": "fn_curl",
     "description": "Run curl for lightweight HTTP checks.\nTypical usage hints: headers only (`-I`), silent fetch (`-s`), method/body (`-X`, `-H`, `--data`).\nProvide all curl CLI arguments via --args.",
     "parameters": {
       "type": "object",

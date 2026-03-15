@@ -8,7 +8,7 @@ main() {
     root_dir="$(cd -- "$( dirname -- "${BASH_SOURCE[0]}" )/.." &> /dev/null && pwd)"
     self_name=run-mcp-tool.sh
     parse_argv "$@"
-    load_env "$root_dir/.env" 
+    load_env "$root_dir/.env"
     run
 }
 
@@ -23,11 +23,13 @@ parse_argv() {
     if [[ "$tool_name" == *.sh ]]; then
         tool_name="${tool_name:0:$((${#tool_name}-3))}"
     fi
-    if [[ -z "$tool_data" ]] || [[ -z "$tool_name" ]]; then
-        die "usage: ./run-tool.sh <tool-name> <tool-data>"
+    if [[ -z "$tool_name" ]]; then
+        die "usage: ./run-mcp-tool.sh <tool-name> <tool-data>"
+    fi
+    if [[ -z "$tool_data" ]]; then
+        tool_data='{}'
     fi
 }
-
 
 load_env() {
     local env_file="$1" env_vars
@@ -47,10 +49,6 @@ load_env() {
 }
 
 run() {
-    if [[ -z "$tool_data" ]]; then
-        die "error: no JSON data"
-    fi
-
     if [[ "$OS" == "Windows_NT" ]]; then
         set -o igncr
         tool_data="$(echo "$tool_data" | sed 's/\\/\\\\/g')"
@@ -61,6 +59,7 @@ run() {
         export LLM_OUTPUT="$(mktemp)"
     fi
 
+    skip_confirm=0
     if [[ -n "$LLM_MCP_SKIP_CONFIRM" ]]; then
         if grep -q -w -E "$LLM_MCP_SKIP_CONFIRM" <<<"$tool_name"; then
             skip_confirm=1
@@ -87,21 +86,26 @@ run() {
     if [[ "$is_temp_llm_output" -eq 1 ]]; then
         cat "$LLM_OUTPUT"
     else
-        dump_result "$tool_name" 
+        dump_result "$tool_name"
     fi
 }
 
 dump_result() {
-    if [[ "$LLM_OUTPUT" == "/dev/stdout" ]] || [[ -z "$LLM_DUMP_RESULTS" ]] ||  [[ ! -t 1 ]]; then
-        return;
+    if [[ "$LLM_OUTPUT" == "/dev/stdout" ]] || [[ -z "$LLM_DUMP_RESULTS" ]] || [[ ! -t 1 ]]; then
+        return
     fi
     if grep -q -w -E "$LLM_DUMP_RESULTS" <<<"$1"; then
-            cat <<EOF
+        cat <<EOF2
 $(echo -e "\e[2m")----------------------
 $(cat "$LLM_OUTPUT")
 ----------------------$(echo -e "\e[0m")
-EOF
+EOF2
     fi
+}
+
+die() {
+    echo "$*" >&2
+    exit 1
 }
 
 main "$@"

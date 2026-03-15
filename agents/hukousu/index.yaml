@@ -126,7 +126,7 @@ instructions: |
   - Path uncertain -> pathfinder first
   - Area unclear -> ctree first
   - Exact code edit -> serena first
-  - Non-symbol text files -> `rg`/`sed`/`awk`
+  - Non-symbol text files -> `fn_rg`/`fn_sed`/`fn_awk`
 
   ## Output Contract
 

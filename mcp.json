@@ -21,7 +21,7 @@
                 "serena",
                 "start-mcp-server",
                 "--context",
-                "claude-code",
+                "ide",
                 "--project-from-cwd"
             ],
             "prefix": true

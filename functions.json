@@ -1,139 +1,367 @@
 [
   {
-    "name": "execute_command",
-    "description": "Execute the shell command.",
+    "name": "jq",
+    "description": "Run jq for JSON filtering and transformation.\nTypical usage hints: extract fields (`.foo`), iterate arrays (`.items[]`), filter (`select(...)`), build new JSON (`{k: .v}`).\nProvide all jq CLI arguments via --args, including filter and optional file paths.",
     "parameters": {
       "type": "object",
       "properties": {
-        "command": {
+        "args": {
           "type": "string",
-          "description": "The command to execute."
-        }
-      },
-      "required": [
-        "command"
-      ]
-    }
-  },
-  {
-    "name": "fs_cat",
-    "description": "Read the contents of a file at the specified path.\nUse this when you need to examine the contents of an existing file.",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "path": {
-          "type": "string",
-          "description": "The path of the file to read"
-        }
-      },
-      "required": [
-        "path"
-      ]
-    }
-  },
-  {
-    "name": "fs_ls",
-    "description": "List all files and directories at the specified path.",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "path": {
-          "type": "string",
-          "description": "The path of the directory to list"
-        }
-      },
-      "required": [
-        "path"
-      ]
-    }
-  },
-  {
-    "name": "fs_mkdir",
-    "description": "Create a new directory at the specified path.",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "path": {
-          "type": "string",
-          "description": "The path of the directory to create"
-        }
-      },
-      "required": [
-        "path"
-      ]
-    }
-  },
-  {
-    "name": "fs_patch",
-    "description": "Apply a patch to a file at the specified path.\nThis can be used to edit the file, without having to rewrite the whole file.",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "path": {
-          "type": "string",
-          "description": "The path of the file to apply to"
+          "description": "jq CLI arguments string. Example: `-r '.items[] | .name' data.json`"
         },
-        "contents": {
+        "stdin": {
           "type": "string",
-          "description": "The patch to apply to the file\n\nHere is an example of a patch block that can be applied to modify the file to request the user's name:\n--- a/hello.py\n+++ b/hello.py\n@@ ... @@\n def hello():\n-    print(\"Hello World\")\n+    name = input(\"What is your name? \")\n+    print(f\"Hello {name}\")"
+          "description": "JSON text piped to jq. Useful when no input file is available."
         }
       },
       "required": [
-        "path",
-        "contents"
+        "args"
       ]
     }
   },
   {
-    "name": "fs_rm",
-    "description": "Remove the file or directory at the specified path.",
+    "name": "awk",
+    "description": "Run awk for pattern matching and column-based text processing.\nTypical usage hints: field extraction (`{print $1}`), filtering (`$3 > 10`), delimiter control (`-F ','`).\nProvide all awk CLI arguments via --args.",
     "parameters": {
       "type": "object",
       "properties": {
-        "path": {
+        "args": {
           "type": "string",
-          "description": "The path of the file or directory to remove"
-        }
-      },
-      "required": [
-        "path"
-      ]
-    }
-  },
-  {
-    "name": "fs_write",
-    "description": "Write the full file contents to a file at the specified path.",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "path": {
-          "type": "string",
-          "description": "The path of the file to write to"
+          "description": "awk CLI arguments string. Example: `-F ',' '{print $1}' data.csv`"
         },
-        "contents": {
+        "stdin": {
           "type": "string",
-          "description": "The full contents to write to the file"
+          "description": "Input text piped to awk. Useful for inline processing."
         }
       },
       "required": [
-        "path",
-        "contents"
+        "args"
       ]
     }
   },
   {
-    "name": "fetch_url_via_curl",
-    "description": "Extract the content from a given URL.",
+    "name": "sed",
+    "description": "Run sed for stream editing.\nTypical usage hints: substitute (`s/old/new/g`), print ranges (`-n '10,20p'`), in-place edits (`-i`) when needed.\nProvide all sed CLI arguments via --args.",
     "parameters": {
       "type": "object",
       "properties": {
-        "url": {
+        "args": {
           "type": "string",
-          "description": "The URL to scrape."
+          "description": "sed CLI arguments string. Example: `-n '1,20p' README.md`"
+        },
+        "stdin": {
+          "type": "string",
+          "description": "Input text piped to sed."
         }
       },
       "required": [
-        "url"
+        "args"
+      ]
+    }
+  },
+  {
+    "name": "head",
+    "description": "Run head for quick preview of the beginning of files or streams.\nTypical usage hints: first N lines (`-n 50`), first bytes (`-c 200`).\nProvide all head CLI arguments via --args.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "args": {
+          "type": "string",
+          "description": "head CLI arguments string. Example: `-n 40 logs/app.log`"
+        },
+        "stdin": {
+          "type": "string",
+          "description": "Input text piped to head."
+        }
+      },
+      "required": [
+        "args"
+      ]
+    }
+  },
+  {
+    "name": "tokei",
+    "description": "Run tokei for code statistics (lines, blanks, comments, language breakdown).\nTypical usage hints: target project paths, use `--sort` or `--output json` for structured output.\nProvide all tokei CLI arguments via --args.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "args": {
+          "type": "string",
+          "description": "tokei CLI arguments string. Example: `--output json src tests`"
+        },
+        "stdin": {
+          "type": "string",
+          "description": "Input text piped to tokei when applicable."
+        }
+      },
+      "required": [
+        "args"
+      ]
+    }
+  },
+  {
+    "name": "dust",
+    "description": "Run dust for disk-usage visualization.\nTypical usage hints: inspect directory sizes, limit depth (`-d`), reverse sort (`-r`).\nProvide all dust CLI arguments via --args.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "args": {
+          "type": "string",
+          "description": "dust CLI arguments string. Example: `-d 3 .`"
+        },
+        "stdin": {
+          "type": "string",
+          "description": "Input text piped to dust when applicable."
+        }
+      },
+      "required": [
+        "args"
+      ]
+    }
+  },
+  {
+    "name": "w3m",
+    "description": "Run w3m in dump mode (`--dump`) for text extraction from web pages or HTML.\nThis wrapper always enforces `w3m --dump` and appends your --args.\nTypical usage hints: pass URL directly, tune width with `-cols`, provide HTML via --stdin plus `-T text/html`.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "args": {
+          "type": "string",
+          "description": "w3m CLI arguments string (without --dump). Example: `https://example.com`"
+        },
+        "stdin": {
+          "type": "string",
+          "description": "HTML text piped to w3m. Pair with args like `-T text/html` when needed."
+        }
+      },
+      "required": [
+        "args"
+      ]
+    }
+  },
+  {
+    "name": "cat",
+    "description": "Run cat for file concatenation and raw text output.\nTypical usage hints: read files in order, include line numbers (`-n`) when needed.\nProvide all cat CLI arguments via --args.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "args": {
+          "type": "string",
+          "description": "cat CLI arguments string. Example: `-n README.md`"
+        },
+        "stdin": {
+          "type": "string",
+          "description": "Input text piped to cat."
+        }
+      },
+      "required": [
+        "args"
+      ]
+    }
+  },
+  {
+    "name": "rg",
+    "description": "Run ripgrep (`rg`) for fast text search.\nTypical usage hints: basic search (`pattern path`), file filtering (`-g`), line numbers (`-n`), context (`-C`).\nProvide all rg CLI arguments via --args.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "args": {
+          "type": "string",
+          "description": "rg CLI arguments string. Example: `-n 'TODO|FIXME' src`"
+        },
+        "stdin": {
+          "type": "string",
+          "description": "Input text piped to rg."
+        }
+      },
+      "required": [
+        "args"
+      ]
+    }
+  },
+  {
+    "name": "fd",
+    "description": "Run fd for fast file discovery by pattern.\nTypical usage hints: search by name (`pattern path`), type filtering (`-t f`/`-t d`), extension (`-e`).\nProvide all fd CLI arguments via --args.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "args": {
+          "type": "string",
+          "description": "fd CLI arguments string. Example: `-t f -e md README .`"
+        },
+        "stdin": {
+          "type": "string",
+          "description": "Input text piped to fd when applicable."
+        }
+      },
+      "required": [
+        "args"
+      ]
+    }
+  },
+  {
+    "name": "ps_aux",
+    "description": "Show process list using `ps aux`.\nUseful for checking high CPU or memory usage, process owners, and command lines.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "filter": {
+          "type": "string",
+          "description": "Filter regex to apply to `ps aux` output."
+        },
+        "no_header": {
+          "type": "string",
+          "description": "Remove the header row."
+        }
+      },
+      "required": []
+    }
+  },
+  {
+    "name": "lsof_listen",
+    "description": "Show listening TCP sockets for a specific port using `lsof -nP -iTCP:<PORT> -sTCP:LISTEN`.\nUse this to identify which process owns a port.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "port": {
+          "type": "string",
+          "description": "TCP port number to inspect."
+        }
+      },
+      "required": [
+        "port"
+      ]
+    }
+  },
+  {
+    "name": "pwd",
+    "description": "Show current working directory using `pwd`.\nPass extra pwd options via --args when needed.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "args": {
+          "type": "string",
+          "description": "Optional pwd CLI arguments string. Example: `-P`"
+        }
+      },
+      "required": []
+    }
+  },
+  {
+    "name": "mkdir",
+    "description": "Create directories using `mkdir -p`.\nThis wrapper always includes `-p` so existing directories do not fail.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "args": {
+          "type": "string",
+          "description": "Directory path arguments. Example: `logs/app tmp/cache`"
+        }
+      },
+      "required": [
+        "args"
+      ]
+    }
+  },
+  {
+    "name": "tail",
+    "description": "Run tail for viewing end of files or streams.\nTypical usage hints: last N lines (`-n 100`), follow mode (`-f`).\nProvide all tail CLI arguments via --args.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "args": {
+          "type": "string",
+          "description": "tail CLI arguments string. Example: `-n 50 app.log`"
+        },
+        "stdin": {
+          "type": "string",
+          "description": "Input text piped to tail."
+        }
+      },
+      "required": [
+        "args"
+      ]
+    }
+  },
+  {
+    "name": "wc",
+    "description": "Run wc for counting lines, words, and bytes.\nTypical usage hints: line count (`-l`), word count (`-w`), byte count (`-c`).\nProvide all wc CLI arguments via --args.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "args": {
+          "type": "string",
+          "description": "wc CLI arguments string. Example: `-l src/main.rs`"
+        },
+        "stdin": {
+          "type": "string",
+          "description": "Input text piped to wc."
+        }
+      },
+      "required": [
+        "args"
+      ]
+    }
+  },
+  {
+    "name": "sort_uniq",
+    "description": "Aggregate values with `sort | uniq`.\nTypical usage hints: count duplicates (`uniq -c`), ignore case (`sort -f`, `uniq -i`).",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "sort_args": {
+          "type": "string",
+          "description": "Optional sort arguments string. Example: `-f`"
+        },
+        "uniq_args": {
+          "type": "string",
+          "description": "Optional uniq arguments string. Example: `-c`"
+        },
+        "stdin": {
+          "type": "string",
+          "description": "Input text to aggregate."
+        }
+      },
+      "required": []
+    }
+  },
+  {
+    "name": "xargs",
+    "description": "Run xargs for pipeline argument expansion.\nTypical usage hints: build command calls from stdin, use `-I {}` for placeholders, use `-0` with null-delimited input.\nProvide all xargs CLI arguments via --args.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "args": {
+          "type": "string",
+          "description": "xargs CLI arguments string. Example: `-I {} echo file:{}`"
+        },
+        "stdin": {
+          "type": "string",
+          "description": "Input text piped to xargs."
+        }
+      },
+      "required": [
+        "args"
+      ]
+    }
+  },
+  {
+    "name": "curl",
+    "description": "Run curl for lightweight HTTP checks.\nTypical usage hints: headers only (`-I`), silent fetch (`-s`), method/body (`-X`, `-H`, `--data`).\nProvide all curl CLI arguments via --args.",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "args": {
+          "type": "string",
+          "description": "curl CLI arguments string. Example: `-s https://example.com`"
+        },
+        "stdin": {
+          "type": "string",
+          "description": "Input text piped to curl, useful with `--data-binary @-`."
+        }
+      },
+      "required": [
+        "args"
       ]
     }
   },

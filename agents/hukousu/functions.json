@@ -30,46 +30,6 @@
     }
   },
   {
-    "name": "fn_awk",
-    "description": "Run awk for pattern matching and column-based text processing.\nTypical usage hints: field extraction (`{print $1}`), filtering (`$3 > 10`), delimiter control (`-F ','`).\nProvide all awk CLI arguments via --args.",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "args": {
-          "type": "string",
-          "description": "awk CLI arguments string. Example: `-F ',' '{print $1}' data.csv`"
-        },
-        "stdin": {
-          "type": "string",
-          "description": "Input text piped to awk. Useful for inline processing."
-        }
-      },
-      "required": [
-        "args"
-      ]
-    }
-  },
-  {
-    "name": "fn_sed",
-    "description": "Run sed for stream editing.\nTypical usage hints: substitute (`s/old/new/g`), print ranges (`-n '10,20p'`), in-place edits (`-i`) when needed.\nProvide all sed CLI arguments via --args.",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "args": {
-          "type": "string",
-          "description": "sed CLI arguments string. Example: `-n '1,20p' README.md`"
-        },
-        "stdin": {
-          "type": "string",
-          "description": "Input text piped to sed."
-        }
-      },
-      "required": [
-        "args"
-      ]
-    }
-  },
-  {
     "name": "fn_head",
     "description": "Run head for quick preview of the beginning of files or streams.\nTypical usage hints: first N lines (`-n 50`), first bytes (`-c 200`).\nProvide all head CLI arguments via --args.",
     "parameters": {
@@ -131,41 +91,21 @@
   },
   {
     "name": "fn_w3m",
-    "description": "Run w3m in dump mode (`--dump`) for text extraction from web pages or HTML.\nThis wrapper always enforces `w3m --dump` and appends your --args.\nTypical usage hints: pass URL directly, tune width with `-cols`, provide HTML via --stdin plus `-T text/html`.",
+    "description": "Fetch a web page as plain text using w3m --dump.",
     "parameters": {
       "type": "object",
       "properties": {
-        "args": {
+        "url": {
           "type": "string",
-          "description": "w3m CLI arguments string (without --dump). Example: `https://example.com`"
+          "description": "URL to fetch. Example: `https://www.nikkei.com`"
         },
         "stdin": {
           "type": "string",
-          "description": "HTML text piped to w3m. Pair with args like `-T text/html` when needed."
+          "description": "HTML text piped to w3m instead of fetching a URL. Requires url to be set to `-T text/html`."
         }
       },
       "required": [
-        "args"
-      ]
-    }
-  },
-  {
-    "name": "fn_cat",
-    "description": "Run cat for file concatenation and raw text output.\nTypical usage hints: read files in order, include line numbers (`-n`) when needed.\nProvide all cat CLI arguments via --args.",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "args": {
-          "type": "string",
-          "description": "cat CLI arguments string. Example: `-n README.md`"
-        },
-        "stdin": {
-          "type": "string",
-          "description": "Input text piped to cat."
-        }
-      },
-      "required": [
-        "args"
+        "url"
       ]
     }
   },
@@ -210,70 +150,6 @@
     }
   },
   {
-    "name": "fn_ps_aux",
-    "description": "Show process list using `ps aux`.\nUseful for checking high CPU or memory usage, process owners, and command lines.",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "filter": {
-          "type": "string",
-          "description": "Filter regex to apply to `ps aux` output."
-        },
-        "no_header": {
-          "type": "string",
-          "description": "Remove the header row."
-        }
-      },
-      "required": []
-    }
-  },
-  {
-    "name": "fn_lsof_listen",
-    "description": "Show listening TCP sockets for a specific port using `lsof -nP -iTCP:<PORT> -sTCP:LISTEN`.\nUse this to identify which process owns a port.",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "port": {
-          "type": "string",
-          "description": "TCP port number to inspect."
-        }
-      },
-      "required": [
-        "port"
-      ]
-    }
-  },
-  {
-    "name": "fn_pwd",
-    "description": "Show current working directory using `pwd`.\nPass extra pwd options via --args when needed.",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "args": {
-          "type": "string",
-          "description": "Optional pwd CLI arguments string. Example: `-P`"
-        }
-      },
-      "required": []
-    }
-  },
-  {
-    "name": "fn_mkdir",
-    "description": "Create directories using `mkdir -p`.\nThis wrapper always includes `-p` so existing directories do not fail.",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "args": {
-          "type": "string",
-          "description": "Directory path arguments. Example: `logs/app tmp/cache`"
-        }
-      },
-      "required": [
-        "args"
-      ]
-    }
-  },
-  {
     "name": "fn_tail",
     "description": "Run tail for viewing end of files or streams.\nTypical usage hints: last N lines (`-n 100`), follow mode (`-f`).\nProvide all tail CLI arguments via --args.",
     "parameters": {
@@ -306,68 +182,6 @@
         "stdin": {
           "type": "string",
           "description": "Input text piped to wc."
-        }
-      },
-      "required": [
-        "args"
-      ]
-    }
-  },
-  {
-    "name": "fn_sort_uniq",
-    "description": "Aggregate values with `sort | uniq`.\nTypical usage hints: count duplicates (`uniq -c`), ignore case (`sort -f`, `uniq -i`).",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "sort_args": {
-          "type": "string",
-          "description": "Optional sort arguments string. Example: `-f`"
-        },
-        "uniq_args": {
-          "type": "string",
-          "description": "Optional uniq arguments string. Example: `-c`"
-        },
-        "stdin": {
-          "type": "string",
-          "description": "Input text to aggregate."
-        }
-      },
-      "required": []
-    }
-  },
-  {
-    "name": "fn_xargs",
-    "description": "Run xargs for pipeline argument expansion.\nTypical usage hints: build command calls from stdin, use `-I {}` for placeholders, use `-0` with null-delimited input.\nProvide all xargs CLI arguments via --args.",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "args": {
-          "type": "string",
-          "description": "xargs CLI arguments string. Example: `-I {} echo file:{}`"
-        },
-        "stdin": {
-          "type": "string",
-          "description": "Input text piped to xargs."
-        }
-      },
-      "required": [
-        "args"
-      ]
-    }
-  },
-  {
-    "name": "fn_curl",
-    "description": "Run curl for lightweight HTTP checks.\nTypical usage hints: headers only (`-I`), silent fetch (`-s`), method/body (`-X`, `-H`, `--data`).\nProvide all curl CLI arguments via --args.",
-    "parameters": {
-      "type": "object",
-      "properties": {
-        "args": {
-          "type": "string",
-          "description": "curl CLI arguments string. Example: `-s https://example.com`"
-        },
-        "stdin": {
-          "type": "string",
-          "description": "Input text piped to curl, useful with `--data-binary @-`."
         }
       },
       "required": [

@@ -112,6 +112,7 @@ merge-functions() {
     result="$(jq -s '.[0] + .[1]' "$tmpdir/1.json" "$tmpdir/2.json")"
     if [[ -n "$argc_save" ]]; then
         printf "%s" "$result" > "$FUNCTIONS_JSON_PATH"
+        _merge_agent_functions "$tmpdir/2.json"
     else
         printf "%s" "$result"
     fi
@@ -127,6 +128,7 @@ recovery-functions() {
     result="$(printf "%s" "$functions" | jq 'map(select(has("mcp") | not))')"
     if [[ -n "$argc_save" ]]; then
         printf "%s" "$result" > "$FUNCTIONS_JSON_PATH"
+        _recovery_agent_functions
     else
         printf "%s" "$result"
     fi
@@ -155,6 +157,26 @@ wait-for-server() {
 # @cmd Get the server pid
 get-server-pid() {
     curl -fsS --max-time 5 http://localhost:$MCP_BRIDGE_PORT/pid 2>/dev/null || true
+}
+
+_merge_agent_functions() {
+    local mcp_json="$1"
+    for agent_json in "$ROOT_DIR"/agents/*/functions.json; do
+        [[ -f "$agent_json" ]] || continue
+        local agent_name="$(basename "$(dirname "$agent_json")")"
+        local clean="$(jq 'map(select(has("mcp") | not))' "$agent_json")"
+        printf "%s" "$clean" | jq -s --slurpfile mcp "$mcp_json" '.[0] + $mcp[0]' > "$agent_json"
+        echo "Merge MCP tools into agents/$agent_name/functions.json"
+    done
+}
+
+_recovery_agent_functions() {
+    for agent_json in "$ROOT_DIR"/agents/*/functions.json; do
+        [[ -f "$agent_json" ]] || continue
+        local agent_name="$(basename "$(dirname "$agent_json")")"
+        jq 'map(select(has("mcp") | not))' "$agent_json" > "$agent_json.tmp" && mv "$agent_json.tmp" "$agent_json"
+        echo "Unmerge MCP tools from agents/$agent_name/functions.json"
+    done
 }
 
 _ask_json_data() {

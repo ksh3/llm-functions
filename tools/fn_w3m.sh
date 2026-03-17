@@ -1,25 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# @describe Run w3m in dump mode (`--dump`) for text extraction from web pages or HTML.
-# This wrapper always enforces `w3m --dump` and appends your --args.
-# Typical usage hints: pass URL directly, tune width with `-cols`, provide HTML via --stdin plus `-T text/html`.
-# @option --args! w3m CLI arguments string (without --dump). Example: `https://example.com`
-# @option --stdin HTML text piped to w3m. Pair with args like `-T text/html` when needed.
+# @describe Fetch a web page as plain text using w3m --dump.
+# @option --url! URL to fetch. Example: `https://www.nikkei.com`
+# @option --stdin HTML text piped to w3m instead of fetching a URL. Requires url to be set to `-T text/html`.
 # @env LLM_OUTPUT=/dev/stdout The output path.
-
-usage() {
-    cat <<'USAGE'
-w3m.sh
-- Purpose: text dump from web pages/HTML.
-- Behavior: always runs w3m with --dump.
-- Required: --args with URL or other w3m arguments.
-- Optional: --stdin for inline HTML input.
-Examples:
-  --args "https://example.com"
-  --args "-T text/html" --stdin '<html><body>Hello</body></html>'
-USAGE
-}
 
 emit() {
     if [[ -n "${LLM_OUTPUT:-}" ]]; then
@@ -30,14 +15,14 @@ emit() {
 }
 
 main() {
-    local args=""
+    local url=""
     local stdin_text=""
 
     while [[ $# -gt 0 ]]; do
         case "$1" in
-            --args)
-                [[ $# -ge 2 ]] || { echo "missing value for --args" >&2; exit 2; }
-                args="$2"
+            --url)
+                [[ $# -ge 2 ]] || { echo "missing value for --url" >&2; exit 2; }
+                url="$2"
                 shift 2
                 ;;
             --stdin)
@@ -46,7 +31,7 @@ main() {
                 shift 2
                 ;;
             -h|--help)
-                usage | emit
+                echo "Usage: fn_w3m.sh --url <URL> [--stdin <HTML>]"
                 exit 0
                 ;;
             *)
@@ -56,16 +41,13 @@ main() {
         esac
     done
 
-    [[ -n "$args" ]] || { echo "--args is required. Use --help for usage." >&2; exit 2; }
-    command -v w3m >/dev/null 2>&1 || { echo "w3m command not found in PATH." >&2; exit 127; }
-
-    local -a parsed_args=()
-    eval "parsed_args=($args)"
+    [[ -n "$url" ]] || { echo "--url is required." >&2; exit 2; }
+    command -v w3m >/dev/null 2>&1 || { echo "w3m not found in PATH." >&2; exit 127; }
 
     if [[ -n "$stdin_text" ]]; then
-        printf '%s' "$stdin_text" | w3m --dump "${parsed_args[@]}" | emit
+        printf '%s' "$stdin_text" | w3m -dump "$url" | emit
     else
-        w3m --dump "${parsed_args[@]}" | emit
+        w3m -dump "$url" | emit
     fi
 }
 
